@@ -20,4 +20,4 @@ Para visualizar o relatório completo e a execução dos códigos, abra o arquiv
 Resultados Principais
 * A implementação manual provou-se funcional, mas cerca de 4x mais lenta que a biblioteca otimizada.
 * O algoritmo CRC-16 detectou 100% dos erros aleatórios testados.
-* Foi possível reproduzir uma colisão (Ponto Cego) injetando um erro idêntico ao polinômio gerador ($x^{16} + x^{12} + x^5 + 1$).
+* Foi possível reproduzir uma colisão (Ponto Cego) injetando um erro idêntico ao polinômio gerador 

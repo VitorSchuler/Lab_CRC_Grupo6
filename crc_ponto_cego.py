@@ -62,7 +62,7 @@ if __name__ == "__main__":
         resto = calcular_crc_manual(quadro_sujo, POLINOMIO_GERADOR)
         detectou = '1' in resto # Se resto != 000...000, detectou!
         
-        status = "DETECTADO ✅" if detectou else "FALHA ❌"
+        status = "DETECTADO ✅" if detectou else "FALHA"
         if detectou: detectados += 1
         
         print(f"Teste {i}: Erro de {tam} bits na pos {pos}. Resultado: {status}")
@@ -97,3 +97,4 @@ if __name__ == "__main__":
     else:
 
         print("Algo deu errado no hack.")
+

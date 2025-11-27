@@ -1,0 +1,23 @@
+# Laboratório de Redes: Implementação e Análise do CRC-16
+
+Este repositório contém os códigos e análises desenvolvidos para o laboratório de Camada de Enlace (Detecção de Erros) da disciplina de Redes de Computadores.
+
+## 👥 Integrantes
+1. **Vitor Schuler Velloso Borges - 123110668** — *Referência do Cenário*
+2. **Gabriel Cabral de Medeiros - 122210158**
+3. **Axel Vaz Souto Lima - 122210109**
+4. **Francisco Juliao Moura Amado -  122210026**
+
+## 📂 Estrutura do Repositório
+* `Lab_CRC_Grupo.ipynb`: Notebook principal contendo a implementação manual, análise de desempenho e investigação de erros (Ponto Cego).
+* `crc_manual.py`: Script com a implementação pura da aritmética polinomial (XOR).
+* `crc_benchmark.py`: Script de comparação de performance (Manual vs Biblioteca CRC).
+* `crc_ponto_cego.py`: Script de validação de robustez e injeção de erro indetectável.
+
+## 🚀 Como executar
+Para visualizar o relatório completo e a execução dos códigos, abra o arquivo `.ipynb` neste repositório.
+
+## 📊 Resultados Principais
+* A implementação manual provou-se funcional, mas cerca de 4x mais lenta que a biblioteca otimizada.
+* O algoritmo CRC-16 detectou 100% dos erros aleatórios testados.
+* Foi possível reproduzir uma colisão (Ponto Cego) injetando um erro idêntico ao polinômio gerador ($x^{16} + x^{12} + x^5 + 1$).

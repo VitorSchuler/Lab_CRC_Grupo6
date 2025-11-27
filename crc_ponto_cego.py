@@ -5,7 +5,6 @@ SEU_NOME = "Vitor Schuler Velloso Borges"
 # Polinômio CRC-16/CCITT-FALSE (x^16 + x^12 + x^5 + 1)
 POLINOMIO_GERADOR = "10001000000100001" 
 
-# --- 2. FUNÇÕES DO CRC MANUAL (Já validadas) ---
 def xor_bits(a, b):
     res = []
     for i in range(1, len(b)):
@@ -32,7 +31,6 @@ def introduzir_erro_rajada(quadro, tamanho_erro):
     Inverte bits aleatórios para simular ruído
     """
     lista = list(quadro)
-    # Escolhe uma posição aleatória que caiba o erro
     pos = random.randint(0, len(quadro) - tamanho_erro)
     padrao = ""
     
@@ -42,7 +40,6 @@ def introduzir_erro_rajada(quadro, tamanho_erro):
         
     return "".join(lista), pos
 
-# --- 4. EXECUÇÃO ---
 if __name__ == "__main__":
     print(f"--- ANÁLISE DE PONTO CEGO (Matrícula Final 8) ---")
     print(f"Nome: {SEU_NOME}")
@@ -59,11 +56,9 @@ if __name__ == "__main__":
     print("\n--- TESTE 1: Erros Aleatórios (O CRC deve detectar todos) ---")
     detectados = 0
     for i in range(1, 11):
-        # Tenta corromper entre 2 e 20 bits
         tam = random.randint(2, 20)
         quadro_sujo, pos = introduzir_erro_rajada(quadro_original, tam)
         
-        # Verifica
         resto = calcular_crc_manual(quadro_sujo, POLINOMIO_GERADOR)
         detectou = '1' in resto # Se resto != 000...000, detectou!
         
@@ -77,22 +72,18 @@ if __name__ == "__main__":
     print("\n--- TESTE 2: FORÇANDO O PONTO CEGO (Hacking) ---")
     print("Teoria: Se o erro for idêntico ao polinômio gerador, o resto da divisão será zero.")
     
-    # Vamos criar um erro cirúrgico
     lista_hack = list(quadro_original)
-    pos_ataque = 20 # Posição arbitrária no meio do nome
+    pos_ataque = 20 
     
     print(f"Injetando o padrão do gerador na posição {pos_ataque}...")
     
-    # Aplica XOR com o gerador na mensagem (simula um erro que é múltiplo do divisor)
     for i in range(len(POLINOMIO_GERADOR)):
         bit_msg = lista_hack[pos_ataque + i]
         bit_poly = POLINOMIO_GERADOR[i]
-        # Se forem iguais vira 0, diferentes vira 1 (Inversão seletiva)
         lista_hack[pos_ataque + i] = '0' if bit_msg == bit_poly else '1'
         
     quadro_ponto_cego = "".join(lista_hack)
     
-    # Verifica se o CRC percebeu
     resto_hack = calcular_crc_manual(quadro_ponto_cego, POLINOMIO_GERADOR)
     detectou_hack = '1' in resto_hack
     
@@ -104,4 +95,5 @@ if __name__ == "__main__":
         print("O CRC calculou resto 0, achando que a mensagem está íntegra, mas ela foi alterada.")
         print(f"Copie isso para a Entrega 4.2: Erro de padrão {POLINOMIO_GERADOR} na posição {pos_ataque}.")
     else:
+
         print("Algo deu errado no hack.")

@@ -4,7 +4,6 @@ import os
 import matplotlib.pyplot as plt
 from crc import Calculator, Crc16
 
-# --- 1. SUA IMPLEMENTAÇÃO MANUAL ---
 def xor_bits(a, b):
     resultado = []
     for i in range(1, len(b)):
@@ -23,15 +22,11 @@ def calcular_crc_manual(dados_bits, gerador_bits):
                 mensagem_aumentada[i + j + 1] = resultado_xor[j]
     return "".join(mensagem_aumentada[-r:])
 
-# --- 2. CONFIGURAÇÃO DO TESTE ---
-# Vamos comparar usando o padrão CRC-16 MODBUS
 calculator_lib = Calculator(Crc16.MODBUS)
 GERADOR_MODBUS_BIN = "11000000000000101" 
 
-# Tamanhos de mensagem (em Bytes): Padrão Ethernet (1.5k), Jumbo (4.5k e 9k)
 tamanhos_bytes = [1500, 4500, 9000]
 
-# Listas para guardar os resultados do gráfico
 dados_grafico = {
     "tamanho": tamanhos_bytes,
     "tempo_manual": [],
@@ -44,12 +39,9 @@ print(f"{'TAMANHO':<10} | {'TEMPO MANUAL':<15} | {'TEMPO LIB':<15}")
 print("-" * 45)
 
 for tamanho in tamanhos_bytes:
-    # Gerar dados aleatórios
     mensagem_bytes = os.urandom(tamanho)
-    # Converter para bits (para nossa função lenta)
     mensagem_bits = "".join(format(byte, '08b') for byte in mensagem_bytes)
     
-    # --- MEDIÇÃO 1: MANUAL (Python Puro) ---
     tracemalloc.start()
     inicio = time.perf_counter()
     
@@ -62,7 +54,6 @@ for tamanho in tamanhos_bytes:
     dados_grafico["tempo_manual"].append(fim - inicio)
     dados_grafico["memoria_manual"].append(pico / 1024) # KiB
 
-    # --- MEDIÇÃO 2: BIBLIOTECA (Otimizada em C) ---
     tracemalloc.start()
     inicio = time.perf_counter()
     
@@ -77,10 +68,8 @@ for tamanho in tamanhos_bytes:
     
     print(f"{tamanho:<10} | {dados_grafico['tempo_manual'][-1]:.5f}s        | {dados_grafico['tempo_lib'][-1]:.5f}s")
 
-# --- 3. GERAR GRÁFICOS ---
 print("\nGerando gráficos comparativos...")
 
-# Gráfico de Tempo
 plt.figure(figsize=(10, 5))
 plt.plot(tamanhos_bytes, dados_grafico["tempo_manual"], 'r-o', label='Manual (Lento)')
 plt.plot(tamanhos_bytes, dados_grafico["tempo_lib"], 'b-x', label='Biblioteca (Rápido)')
@@ -91,7 +80,6 @@ plt.legend()
 plt.grid(True)
 plt.savefig('grafico_crc_tempo.png')
 
-# Gráfico de Memória
 plt.figure(figsize=(10, 5))
 plt.plot(tamanhos_bytes, dados_grafico["memoria_manual"], 'r-o', label='Manual')
 plt.plot(tamanhos_bytes, dados_grafico["memoria_lib"], 'b-x', label='Biblioteca')
@@ -101,5 +89,6 @@ plt.ylabel('Pico de Memória (KiB)')
 plt.legend()
 plt.grid(True)
 plt.savefig('grafico_crc_memoria.png')
+
 
 print("Gráficos salvos como 'grafico_crc_tempo.png' e 'grafico_crc_memoria.png'.")
